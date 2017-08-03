@@ -17,12 +17,31 @@
 # Configure horizon
 ---
 
+- name: HZN-WEB | configure | Add horizon_venv user to horizon group
+  become: yes
+  user:
+    name: "{{ horizon_venv_user }}"
+    groups: "{{ horizon_group }}"
+    append: yes
+
 # Create horizon local_settings.py from template
 - name: HZN-WEB | configure | Copy local_settings.py to horizon venv
   template:
     src: local_settings.py
     dest: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/"
   register: ardana_notify_horizon_config_changed
+
+- name: HZN-WEB | configure | Remove any existing local_settings.pyc from horizon venv
+  file:
+    state: absent
+    path: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/local_settings.pyc"
+
+- name: HZN-WEB | configure | Set proper permissions for local_settings.py
+  file:
+    path: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/local_settings.py"
+    owner: root
+    group: "{{ horizon_user }}"
+    mode: 0640
 
 - name: HZN-WEB | configure | Symlink local_settings.py to horizon/etc
   file:
