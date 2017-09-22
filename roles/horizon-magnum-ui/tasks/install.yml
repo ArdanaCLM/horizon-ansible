@@ -1,0 +1,30 @@
+#
+# (c) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (c) Copyright 2017 SUSE LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+
+- name: horizon-magnum-ui-infra-panel | install | Symlink magnum-ui infra panels to horizon
+  file:
+    src: "{{ horizon_site_packages_dir }}/magnum_ui/enabled/{{ item }}.py"
+    dest: "{{ horizon_enabled_dashboard_dir }}/{{ item }}.py"
+    state: link
+    force: no
+    owner: "{{ horizon_venv_user }}"
+    group: "{{ horizon_venv_group }}"
+  with_items:
+    - _1370_project_container_infra_panel_group
+    - _1371_project_container_infra_clusters_panel
+    - _1372_project_container_infra_cluster_templates_panel
