@@ -17,15 +17,11 @@
 ---
 
 # Install wsgi Apache module
-- name:  HZN-WEB | install | Install modwsgi dependencies
-  apt:
+- name:  HZN-WEB | install | Install dependencies
+  package:
     state: latest
     name: "{{ item }}"
-  with_items:
-    - libapache2-mod-wsgi
-
-- name: HZN-WEB | install | Install gettext
-  apt: name=gettext state=latest force=yes
+  with_items: horizon_packages
 
 # Create group to own horizon's site-packages
 - name: HZN-WEB | install | Add group '{{ horizon_venv_group }}'
