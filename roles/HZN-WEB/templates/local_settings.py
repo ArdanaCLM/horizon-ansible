@@ -164,9 +164,10 @@ TIME_ZONE = "UTC"
 SITE_BRANDING = 'SUSE Ardana OpenStack'
 
 AVAILABLE_THEMES = [
-    ('grommet', 'Grommet', 'themes/grommet'),
+    ('default', 'Default', 'themes/default'),
 ]
-DEFAULT_THEME = 'grommet'
+
+DEFAULT_THEME = 'default'
 
 OPENSTACK_CINDER_FEATURES = {
     'enable_backup': True,
