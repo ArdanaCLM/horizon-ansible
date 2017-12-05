@@ -35,12 +35,16 @@
     - horizon-ironic-ui
     - horizon-magnum-ui
     - horizon-lbaas-dashboard
+    - horizon-vpnaas-dashboard
+    - horizon-fwaas-dashboard
   tasks:
     - include: roles/horizon-designate-dashboard/tasks/install.yml
     - include: roles/horizon-freezer-ui/tasks/install.yml
     - include: roles/horizon-ironic-ui/tasks/install.yml
     - include: roles/horizon-magnum-ui/tasks/install.yml
     - include: roles/horizon-lbaas-dashboard/tasks/install.yml
+    - include: roles/horizon-vpnaas-dashboard/tasks/install.yml
+    - include: roles/horizon-fwaas-dashboard/tasks/install.yml
 
 - hosts: HZN-WEB
   become: yes

@@ -21,7 +21,6 @@ from openstack_dashboard import exceptions
 from openstack_dashboard.settings import HORIZON_CONFIG
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 COMPRESS_OFFLINE = True
 _LOG_LEVEL = '{{ horizon_log_level }}'
 
@@ -129,15 +128,7 @@ OPENSTACK_NEUTRON_NETWORK = {
     'enable_distributed_router': False,
     'enable_ha_router': False,
     'enable_lb': True,
-    'enable_firewall': True,
-    'enable_vpn': True,
     'enable_fip_topology_check': True,
-
-    # The profile_support option is used to detect if an external router can be
-    # configured via the dashboard. When using specific plugins the
-    # profile_support can be turned on if needed.
-    'profile_support': None,
-    #'profile_support': 'cisco',
 
     # Set which provider network types are supported. Only the network types
     # in this list will be available to choose from when creating a network.
@@ -209,7 +200,7 @@ LOGGING = {
     'handlers': {
         'null': {
             'level': 'INFO',
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
         'console': {
             # Set the level to "DEBUG" for verbose output logging.
