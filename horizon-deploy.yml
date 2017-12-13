@@ -17,7 +17,7 @@
 ---
 
 - hosts: HZN-WEB
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
     - tls-trust
@@ -27,7 +27,7 @@
     - include: roles/tls-trust/tasks/install.yml
 
 - hosts: HZN-WEB
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
     - horizon-designate-dashboard
@@ -43,7 +43,7 @@
     - include: roles/horizon-lbaas-dashboard/tasks/install.yml
 
 - hosts: HZN-WEB
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
   tasks:
@@ -55,7 +55,7 @@
 
 - hosts: localhost
   connection: local
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
   tasks:

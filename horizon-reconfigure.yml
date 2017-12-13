@@ -17,14 +17,14 @@
 ---
 
 - hosts: HZN-WEB
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
   tasks:
     - include: roles/HZN-WEB/tasks/configure.yml
 
 - hosts: HZN-WEB
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
   tasks:
@@ -34,7 +34,7 @@
 - include: horizon-configure-monasca.yml
 
 - hosts: localhost
-  sudo: yes
+  become: yes
   roles:
     - HZN-WEB
   tasks:
