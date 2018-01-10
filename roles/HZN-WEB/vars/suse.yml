@@ -16,5 +16,6 @@
 #
 ---
 horizon_packages:
+  - cron
   - apache2-mod_wsgi
   - gettext-tools
