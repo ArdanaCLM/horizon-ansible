@@ -39,12 +39,19 @@
     - horizon-fwaas-dashboard
   tasks:
     - include: roles/horizon-designate-dashboard/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
     - include: roles/horizon-freezer-ui/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
     - include: roles/horizon-ironic-ui/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
     - include: roles/horizon-magnum-ui/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
     - include: roles/horizon-lbaas-dashboard/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
     - include: roles/horizon-vpnaas-dashboard/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
     - include: roles/horizon-fwaas-dashboard/tasks/install.yml
+      when: deployer_media_legacy_layout|bool
 
 - hosts: HZN-WEB
   become: yes

@@ -26,6 +26,7 @@
   environment:
     HORIZON_LOG_TO_CONSOLE: 1
     DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
+    PYTHONPATH: "{{ horizon_package_dir }}"
 
 # Compress the static files
 # The command should typically translate to:
@@ -37,20 +38,23 @@
   environment:
     HORIZON_LOG_TO_CONSOLE: 1
     DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
+    PYTHONPATH: "{{ horizon_package_dir }}"
 
 - name: horizon_post_configure | post-configure | Compile translations
   command: "{{ horizon_bin_dir }}/django-admin.py compilemessages"
   become: yes
   become_user: "{{ horizon_venv_user }}"
   args:
-    chdir: "{{ horizon_site_packages_dir }}/{{ item }}"
+    chdir: "{{ item }}"
   environment:
     HORIZON_LOG_TO_CONSOLE: 1
     DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
+    PYTHONPATH: "{{ horizon_package_dir }}"
   with_items:
-    - openstack_dashboard
-    - horizon
-    - openstack_auth
+    - "{{ horizon_package_dir }}/openstack_dashboard"
+    - "{{ horizon_site_packages_dir }}/horizon"
+    - "{{ horizon_site_packages_dir }}/openstack_auth"
+  when: deployer_media_legacy_layout|bool
 
 - name: horizon_post_configure | post-configure | DB migration and sync
   become: yes
@@ -60,6 +64,7 @@
   environment:
     HORIZON_LOG_TO_CONSOLE: 1
     DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
+    PYTHONPATH: "{{ horizon_package_dir }}"
 
 # Database session backing requires clearing out the session table once in a while
 - name: horizon_post_configure | post-configure | Set up cronjob to clear expired sessions
@@ -69,7 +74,7 @@
     # Make this configurable based on timezone somehow?
     hour: "{{ 23 }}"
     minute: "{{ 59 | random }}"
-    job: "DJANGO_SETTINGS_MODULE=openstack_dashboard.settings {{ horizon_bin_dir }}/django-admin.py clearsessions"
+    job: "PYTHONPATH={{ horizon_package_dir }} DJANGO_SETTINGS_MODULE=openstack_dashboard.settings {{ horizon_bin_dir }}/django-admin.py clearsessions"
 
 
 # Sync policy files
@@ -78,7 +83,7 @@
   register: keystone_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy keystone policy file"
-  command: "cp {{ 'keystone' | config_dir() }}/policy.json {{ horizon_site_packages_dir }}/openstack_dashboard/conf/keystone_policy.json"
+  command: "cp {{ 'keystone' | config_dir() }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/keystone_policy.json"
   when: keystone_policy_file_info.stat.exists
 
 
@@ -87,7 +92,7 @@
   register: nova_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy nova policy file"
-  command: "cp {{ 'nova-api' | config_dir() }}/nova/policy.json {{ horizon_site_packages_dir }}/openstack_dashboard/conf/nova_policy.json"
+  command: "cp {{ 'nova-api' | config_dir() }}/nova/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/nova_policy.json"
   when: nova_policy_file_info.stat.exists
 
 
@@ -96,7 +101,7 @@
   register: cinder_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy cinder policy file"
-  command: "cp {{ cinder_dir }}/policy.json {{ horizon_site_packages_dir }}/openstack_dashboard/conf/cinder_policy.json"
+  command: "cp {{ cinder_dir }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/cinder_policy.json"
   when: cinder_policy_file_info.stat.exists
 
 
@@ -105,11 +110,11 @@
   register: neutron_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy neutron policy file"
-  command: "cp {{ 'neutron' | config_dir() }}/policy.json {{ horizon_site_packages_dir }}/openstack_dashboard/conf/neutron_policy.json"
+  command: "cp {{ 'neutron' | config_dir() }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/neutron_policy.json"
   when: neutron_policy_file_info.stat.exists
 
 - name: "HZN-WEB | copy_policy_files | Modify neutron policy file"
-  replace: dest={{ horizon_site_packages_dir }}/openstack_dashboard/conf/neutron_policy.json regexp='tenant_id' replace='project_id'
+  replace: dest={{ horizon_package_dir }}/openstack_dashboard/conf/neutron_policy.json regexp='tenant_id' replace='project_id'
   when: neutron_policy_file_info.stat.exists
 
 
@@ -118,7 +123,7 @@
   register: glance_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy glance policy file"
-  command: "cp {{ 'glance-api' | config_dir() }}/policy.json {{ horizon_site_packages_dir }}/openstack_dashboard/conf/glance_policy.json"
+  command: "cp {{ 'glance-api' | config_dir() }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/glance_policy.json"
   when: glance_policy_file_info.stat.exists
 
 
@@ -127,7 +132,7 @@
   register: heat_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy heat policy file"
-  command: "cp {{ 'heat-api' | config_dir() }}/heat/policy.json {{ horizon_site_packages_dir}}/openstack_dashboard/conf/heat_policy.json"
+  command: "cp {{ 'heat-api' | config_dir() }}/heat/policy.json {{ horizon_package_dir}}/openstack_dashboard/conf/heat_policy.json"
   when: heat_policy_file_info.stat.exists
 
 
@@ -136,5 +141,5 @@
   register: ceilometer_policy_file_info
 
 - name: "HZN-WEB | copy_policy_files | Copy ceilometer policy file"
-  command: "cp {{ 'ceilometer-api' | config_dir() }}/policy.json {{ horizon_site_packages_dir }}/openstack_dashboard/conf/ceilometer_policy.json"
+  command: "cp {{ 'ceilometer-api' | config_dir() }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/ceilometer_policy.json"
   when: ceilometer_policy_file_info.stat.exists

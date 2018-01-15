@@ -28,17 +28,17 @@
 - name: HZN-WEB | configure | Copy local_settings.py to horizon venv
   template:
     src: local_settings.py
-    dest: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/"
+    dest: "{{ horizon_openstack_dashboard_dir }}/local/"
   register: ardana_notify_horizon_config_changed
 
 - name: HZN-WEB | configure | Remove any existing local_settings.pyc from horizon venv
   file:
     state: absent
-    path: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/local_settings.pyc"
+    path: "{{ horizon_openstack_dashboard_dir }}/local/local_settings.pyc"
 
 - name: HZN-WEB | configure | Set proper permissions for local_settings.py
   file:
-    path: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/local_settings.py"
+    path: "{{ horizon_openstack_dashboard_dir }}/local/local_settings.py"
     owner: root
     group: "{{ horizon_user }}"
     mode: 0640
@@ -46,13 +46,13 @@
 - name: HZN-WEB | configure | Symlink local_settings.py to horizon/etc
   file:
     state: link
-    src: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/local_settings.py"
+    src: "{{ horizon_openstack_dashboard_dir }}/local/local_settings.py"
     dest: "{{ horizon_conf_dir }}/local_settings.py"
 
 - name: HZN-WEB | configure | Symlink local/enabled to horizon/etc
   file:
     state: link
-    src: "{{ horizon_site_packages_dir }}/openstack_dashboard/local/enabled"
+    src: "{{ horizon_openstack_dashboard_dir }}/local/enabled"
     dest: "{{ horizon_conf_dir }}/enabled"
 
 # Create django secret key

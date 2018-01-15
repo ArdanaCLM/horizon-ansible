@@ -15,7 +15,10 @@
 # under the License.
 #
 ---
+horizon_centralized_log_group: horizon
+
 horizon_packages:
   - cron
   - apache2-mod_wsgi
   - gettext-tools
+  - libtiff5

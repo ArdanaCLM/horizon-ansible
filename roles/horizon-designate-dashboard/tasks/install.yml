@@ -24,6 +24,7 @@
     force: no
     owner: "{{ horizon_venv_user }}"
     group: "{{ horizon_venv_group }}"
+  when: deployer_media_legacy_layout|bool
 
 - name: horizon-designate-dashboard | install | Symlink designate enabled file to horizon
   file:
@@ -33,3 +34,4 @@
     force: no
     owner: "{{ horizon_venv_user }}"
     group: "{{ horizon_venv_group }}"
+  when: deployer_media_legacy_layout|bool
