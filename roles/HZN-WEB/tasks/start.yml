@@ -32,6 +32,7 @@
   register: horizon_enable_result
   changed_when: ( horizon_enable_result | success ) and
                 ( 'already enabled' not in horizon_enable_result.stdout )
+  when: ansible_os_family == 'Debian'
 
 # BUG-4663 - changing the apache config (specifically the Listen address)
 # requires a restart, whereas changing the django config can be a reload

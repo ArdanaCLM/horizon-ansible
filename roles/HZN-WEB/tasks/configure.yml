@@ -66,7 +66,7 @@
 - name: HZN-WEB | configure | Create Apache vhost config for Horizon
   template:
     src: horizon.conf
-    dest: /etc/apache2/sites-available
+    dest: "{{ apache2_vhost_dir }}"
   register: ardana_notify_horizon_apache_config_changed
 
 # This is necessary because it's python logging to this file, and logging is
