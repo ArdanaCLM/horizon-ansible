@@ -17,11 +17,19 @@
 ---
 
 # Disable virtual host for horizon
-- name:  HZN-WEB | stop | Disable Horizon vhost
+- name:  HZN-WEB | stop | Disable Horizon vhost (hlinux)
   command: a2dissite horizon
   register: horizon_disable_result
   changed_when: ( horizon_disable_result | success ) and
                 ( 'already disabled' not in horizon_disable_result.stdout )
+  when: ansible_os_family == 'Debian'
+
+- name:  HZN-WEB | stop | Disable Horizon vhost (SUSE)
+  file:
+    state: absent
+    path: "{{ apache2_vhost_dir }}/horizon.conf"
+  register: horizon_disable_result
+  when: ansible_os_family == 'Suse'
 
 # Reload Apache
 - include: "{{ playbook_dir }}/roles/FND-AP2/tasks/start_reload.yml"
