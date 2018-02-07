@@ -1,6 +1,6 @@
 #
 # (c) Copyright 2015-2017 Hewlett Packard Enterprise Development LP
-# (c) Copyright 2017 SUSE LLC
+# (c) Copyright 2017-2018 SUSE LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -55,9 +55,9 @@ horizon_static_dir: "{{ service | venv_dir() }}/static"
 # are never used to refer to paths in an un-activated venv, but always used in
 # a context where only the symlinked path is to be used.
 horizon_venv_dir_constant: "/opt/stack/service/horizon/venv"
-horizon_site_packages_dir_constant: "{{ horizon_venv_dir_constant }}/python2.7/site-packages"
+horizon_site_packages_dir_constant: "{{ horizon_venv_dir_constant }}/lib/python2.7/site-packages"
 horizon_package_dir_constant: "{% if deployer_media_legacy_layout|bool -%}
-                                   {{ horizon_site_packages_dir_constant }}/python2.7/site-packages
+                                   {{ horizon_site_packages_dir_constant }}
                                {%- else -%}
                                    {{ horizon_venv_dir_constant }}/srv/www/openstack-dashboard
                                {%- endif -%}"
