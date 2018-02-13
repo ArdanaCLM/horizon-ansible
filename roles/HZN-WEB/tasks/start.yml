@@ -27,19 +27,12 @@
 
 # Enable virtual host for horizon
 
-- name:  HZN-WEB | start | Enable Horizon vhost (hlinux)
-  command: a2ensite horizon
-  register: horizon_enable_result
-  changed_when: ( horizon_enable_result | success ) and
-                ( 'already enabled' not in horizon_enable_result.stdout )
-  when: ansible_os_family == 'Debian'
-
-- name:  HZN-WEB | start | Enable Horizon vhost (Suse)
-  template:
-    src: horizon.conf
+- name:  HZN-WEB | start | Enable Horizon vhost
+  file:
+    src: "{{ apache2_vhost_dir }}/horizon.vhost"
     dest: "{{ apache2_vhost_dir }}/horizon.conf"
+    state: link
   register: horizon_enable_result
-  when: ansible_os_family == 'Suse'
 
 # BUG-4663 - changing the apache config (specifically the Listen address)
 # requires a restart, whereas changing the django config can be a reload
