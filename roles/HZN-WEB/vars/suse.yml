@@ -25,3 +25,4 @@ horizon_packages:
   - python-mysql
   - gettext-tools
   - libtiff5
+  - python-PyYAML

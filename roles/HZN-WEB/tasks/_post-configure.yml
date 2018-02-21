@@ -91,10 +91,36 @@
   stat: path="{{ 'nova-api' | config_dir() }}/nova/policy.json"
   register: nova_policy_file_info
 
-- name: "HZN-WEB | copy_policy_files | Copy nova policy file"
-  command: "cp {{ 'nova-api' | config_dir() }}/nova/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/nova_policy.json"
-  when: nova_policy_file_info.stat.exists
+# the policy file for Nova no longer exists as of Pike, use a generated copy if possible
+# and use a static copy if Nova is not locally installed
+- name: "HZN-WEB | copy_policy_file_generator_script | Copy policy file generator"
+  become: yes
+  copy:
+    src: "gen_policy.sh"
+    dest: "{{ horizon_package_dir }}/gen_policy.sh"
+    owner: "{{ horizon_venv_user }}"
+    group: "{{ horizon_venv_group }}"
+    mode: 0775
 
+- name: "HZN-WEB | check_for_nova | Check for nova installation"
+  stat: path="{{ 'nova-api' | venv_dir() }}"
+  register: nova_install_dir
+
+- name: HZN-WEB | generate_policy_files | Generate nova policy file
+  become: yes
+  become_user: "{{ horizon_venv_user }}"
+  shell: "{{ horizon_package_dir }}/gen_policy.sh {{ 'nova-api' | venv_dir() }} nova {{ 'nova-api' | config_dir() }} {{ horizon_package_dir }}"
+  when: nova_install_dir.stat.exists
+
+- name: "HZN-WEB | copy_policy_files | Copy nova policy file"
+  become: yes
+  copy:
+    src: "openstack_dashboard/conf/nova_policy.json"
+    dest: "{{ horizon_package_dir }}/openstack_dashboard/conf/nova_policy.json"
+    owner: "{{ horizon_venv_user }}"
+    group: "{{ horizon_venv_group }}"
+    mode: 0664
+  when: not nova_install_dir.stat.exists
 
 - name: "HZN-WEB | copy_policy_files | Check for cinder policy file"
   stat: path="{{ cinder_dir }}/policy.json"
