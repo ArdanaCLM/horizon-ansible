@@ -29,6 +29,8 @@ horizon_group: horizon
 horizon_venv_user: horizon-venv
 horizon_venv_group: horizon-venv
 
+horizon_home_dir: /var/lib/horizon
+
 service: horizon
 
 # Set service dirs using package filters where possible

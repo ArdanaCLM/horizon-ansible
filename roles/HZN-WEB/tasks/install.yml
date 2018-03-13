@@ -35,8 +35,8 @@
     name: "{{ horizon_venv_user }}"
     group: "{{ horizon_venv_group }}"
     createhome: no
-    home: /tmp
-    shell: /bin/true
+    home: "{{ horizon_home_dir }}"
+    shell: /usr/sbin/nologin
     state: present
   ignore_errors: true
 
@@ -99,8 +99,8 @@
     name: "{{ horizon_user }}"
     group: "{{ horizon_group }}"
     createhome: no
-    home: /tmp
-    shell: /bin/true
+    home: "{{ horizon_home_dir }}"
+    shell: /usr/sbin/nologin
     state: present
   ignore_errors: true
 
@@ -127,6 +127,15 @@
     state: directory
     follow: true
   when: deployer_media_legacy_layout|bool == false
+
+# Create home dir for horizon processes
+- name: HZN-WEB | install | Create directory '{{ horizon_home_dir }}'.
+  file:
+    path: "{{ horizon_home_dir }}"
+    owner: "{{ horizon_user }}"
+    group: "{{ horizon_group }}"
+    mode: 0750
+    state: directory
 
 - name: HZN-WEB | install | Create directory '{{ horizon_conf_dir }}'.
   file:
