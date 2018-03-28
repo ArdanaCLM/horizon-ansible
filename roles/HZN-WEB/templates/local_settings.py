@@ -1,6 +1,6 @@
 #
 # (c) Copyright 2015-2017 Hewlett Packard Enterprise Development LP
-# (c) Copyright 2017 SUSE LLC
+# (c) Copyright 2017-2018 SUSE LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
 OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'
 
 OPENSTACK_ENDPOINT_TYPE = "{{ horizon_openstack_endpoint_type }}"
-OPENSTACK_SSL_CACERT = "/etc/ssl/certs/ca-certificates.crt"
+OPENSTACK_SSL_CACERT = "{{ trusted_ca_bundle }}"
 # The CA certificate for the external endpoints
 ARDANA_EXTERNAL_SSL_CACERT = "{{ external_cacert_filename }}"
 

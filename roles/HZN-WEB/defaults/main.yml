@@ -86,7 +86,7 @@ horizon_openstack_endpoint_type: "internalURL"
 # user configurable
 horizon_log_level: INFO
 
-ca_file: "/etc/ssl/certs/ca-certificates.crt"
+ca_file: "{{ trusted_ca_bundle }}"
 
 mysql:
   host: >
