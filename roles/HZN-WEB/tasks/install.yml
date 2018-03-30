@@ -19,7 +19,7 @@
 # Install wsgi Apache module
 - name:  HZN-WEB | install | Install dependencies
   package:
-    state: latest
+    state: present
     name: "{{ item }}"
   with_items: horizon_packages
 
