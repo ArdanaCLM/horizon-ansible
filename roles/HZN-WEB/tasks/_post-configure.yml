@@ -129,7 +129,8 @@
   shell: >
     sed -i 's/"$/",\n
     "os_compute_api:os-server-groups:discoverable": "rule:os_compute_api:os-server-groups",\n
-    "os_compute_api:os-scheduler-hints:discoverable": "rule:os_compute_api:os-server-groups"/'
+    "os_compute_api:os-scheduler-hints:discoverable": "rule:os_compute_api:os-server-groups",\n
+    "compute_extension:aggregates": "rule:admin_api"/'
     "{{ horizon_package_dir }}/openstack_dashboard/conf/nova_policy.json"
   when: nova_install_dir.stat.exists
 
