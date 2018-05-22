@@ -123,6 +123,8 @@
 # addressed in Queens upstream at:
 # https://github.com/openstack/horizon/blob/stable/queens/openstack_dashboard/conf/nova_policy.d/api-extensions.yaml
 # TODO: REMOVE once product is upgraded to Queens or later OpenStack release
+# compute_extension:aggregates addresses bsc#1089940 (host aggregates missing in Horizon)
+# os_compute_api:servers:attach_volume addresses bsc#1094184 (attach volume policy rule in generated file is a mismatch for rule in code)
 - name: HZN-WEB | patch nova_policy_file | Add missing rules to nova_policy.json
   become: yes
   become_user: "{{ horizon_venv_user }}"
@@ -130,6 +132,7 @@
     sed -i 's/"$/",\n
     "os_compute_api:os-server-groups:discoverable": "rule:os_compute_api:os-server-groups",\n
     "os_compute_api:os-scheduler-hints:discoverable": "rule:os_compute_api:os-server-groups",\n
+    "os_compute_api:servers:attach_volume": "rule:admin_or_owner",\n
     "compute_extension:aggregates": "rule:admin_api"/'
     "{{ horizon_package_dir }}/openstack_dashboard/conf/nova_policy.json"
   when: nova_install_dir.stat.exists
