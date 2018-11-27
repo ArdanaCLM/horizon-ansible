@@ -94,7 +94,7 @@ SESSION_COOKIE_SECURE = False
 
 OPENSTACK_KEYSTONE_URL = "{{ horizon_keystone_url }}"
 
-OPENSTACK_KEYSTONE_DEFAULT_ROLE = "_member_"
+OPENSTACK_KEYSTONE_DEFAULT_ROLE = "member"
 
 OPENSTACK_KEYSTONE_BACKEND = {
     'name': 'native',
