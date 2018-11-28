@@ -36,8 +36,8 @@ LAUNCH_INSTANCE_NG_ENABLED = True
 with open('{{ horizon_conf_dir }}/.secret_key_store', 'r') as f:
     SECRET_KEY = f.read()
 
-#TODO Modify this link to current doc path
-HORIZON_CONFIG['help_url'] = "https://www.suse.com/documentation/suse-openstack-cloud-7"
+# Modified this link to current doc path (#bgz-1114241) 
+HORIZON_CONFIG['help_url'] = "https://www.suse.com/documentation/suse-openstack-cloud-9"
 
 # Turn off browser autocompletion for forms including the login form and
 # the database creation workflow if so desired.
