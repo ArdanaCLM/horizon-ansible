@@ -40,22 +40,6 @@
     DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
     PYTHONPATH: "{{ horizon_package_dir }}"
 
-- name: horizon_post_configure | post-configure | Compile translations
-  command: "{{ horizon_bin_dir }}/django-admin.py compilemessages"
-  become: yes
-  become_user: "{{ horizon_venv_user }}"
-  args:
-    chdir: "{{ item }}"
-  environment:
-    HORIZON_LOG_TO_CONSOLE: 1
-    DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
-    PYTHONPATH: "{{ horizon_package_dir }}"
-  with_items:
-    - "{{ horizon_package_dir }}/openstack_dashboard"
-    - "{{ horizon_site_packages_dir }}/horizon"
-    - "{{ horizon_site_packages_dir }}/openstack_auth"
-  when: deployer_media_legacy_layout|bool
-
 - name: horizon_post_configure | post-configure | DB migration and sync
   become: yes
   become_user: "{{ horizon_venv_user }}"

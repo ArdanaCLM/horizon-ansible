@@ -68,11 +68,7 @@
     horizon_conf_dir: "{{ service | config_dir(ardana_notify_horizon_venv_activate_required.version) }}"
     horizon_enabled_dashboard_dir: "{{ service | jar_dir(ardana_notify_horizon_venv_activate_required.version) }}/python2.7/site-packages/openstack_dashboard/local/enabled"
     horizon_site_packages_dir: "{{ service | jar_dir(ardana_notify_horizon_venv_activate_required.version) }}/python2.7/site-packages"
-    horizon_package_dir: "{% if deployer_media_legacy_layout|bool -%}
-                              {{ service | jar_dir(ardana_notify_horizon_venv_activate_required.version) }}/python2.7/site-packages
-                          {%- else -%}
-                              {{ service | venv_dir(ardana_notify_horizon_venv_activate_required.version) }}/srv/www/openstack-dashboard
-                          {%- endif -%}"
+    horizon_package_dir: "{{ service | venv_dir(ardana_notify_horizon_venv_activate_required.version) }}/srv/www/openstack-dashboard"
     horizon_bin_dir: "{{ service | bin_dir(ardana_notify_horizon_venv_activate_required.version) }}"
     horizon_static_dir: "{{ service | venv_dir(ardana_notify_horizon_venv_activate_required.version) }}/static"
 
@@ -116,7 +112,6 @@
     - "{{ service | venv_dir(ardana_notify_horizon_venv_activate_required.version) }}/srv"
     - "{{ service | venv_dir(ardana_notify_horizon_venv_activate_required.version) }}/srv/www"
     - "{{ horizon_openstack_dashboard_dir }}"
-  when: deployer_media_legacy_layout|bool == false
 
 - name: HZN-WEB | install | chmod django local dir for horizon (rpm only)
   file:
@@ -126,7 +121,6 @@
     mode: 0770
     state: directory
     follow: true
-  when: deployer_media_legacy_layout|bool == false
 
 # Create home dir for horizon processes
 - name: HZN-WEB | install | Create directory '{{ horizon_home_dir }}'.

@@ -43,11 +43,7 @@ service: horizon
 horizon_conf_dir: "{{ service | config_dir() }}"
 horizon_enabled_dashboard_dir: "{{ service | jar_dir() }}/python2.7/site-packages/openstack_dashboard/local/enabled"
 horizon_site_packages_dir: "{{ service | jar_dir() }}/python2.7/site-packages"
-horizon_package_dir: "{% if deployer_media_legacy_layout|bool -%}
-                          {{ horizon_site_packages_dir }}
-                      {%- else -%}
-                          {{ service | venv_dir() }}/srv/www/openstack-dashboard
-                      {%- endif -%}"
+horizon_package_dir: "{{ service | venv_dir() }}/srv/www/openstack-dashboard"
 horizon_openstack_dashboard_dir: "{{ horizon_package_dir }}/openstack_dashboard"
 horizon_bin_dir: "{{ service | bin_dir() }}"
 horizon_static_dir: "{{ service | venv_dir() }}/static"
@@ -58,11 +54,7 @@ horizon_static_dir: "{{ service | venv_dir() }}/static"
 # a context where only the symlinked path is to be used.
 horizon_venv_dir_constant: "/opt/stack/service/horizon/venv"
 horizon_site_packages_dir_constant: "{{ horizon_venv_dir_constant }}/lib/python2.7/site-packages"
-horizon_package_dir_constant: "{% if deployer_media_legacy_layout|bool -%}
-                                   {{ horizon_site_packages_dir_constant }}
-                               {%- else -%}
-                                   {{ horizon_venv_dir_constant }}/srv/www/openstack-dashboard
-                               {%- endif -%}"
+horizon_package_dir_constant: "{{ horizon_venv_dir_constant }}/srv/www/openstack-dashboard"
 horizon_openstack_dashboard_dir_constant: "{{ horizon_package_dir_constant }}/openstack_dashboard"
 horizon_python_path_constant: "{{ horizon_venv_dir_constant }}:{{ horizon_venv_dir_constant }}/lib/python2.7/site-packages/"
 horizon_static_dir_constant: "{{ horizon_venv_dir_constant }}/static"
