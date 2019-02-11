@@ -160,6 +160,8 @@ AVAILABLE_THEMES = [
 
 DEFAULT_THEME = 'default'
 
+SHOW_KEYSTONE_V2_RC = False
+
 OPENSTACK_CINDER_FEATURES = {
     'enable_backup': True,
 }
