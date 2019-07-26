@@ -167,8 +167,9 @@
   stat: path="{{ 'heat-api' | config_dir() }}/heat/policy.json"
   register: heat_policy_file_info
 
-- name: "HZN-WEB | copy_policy_files | Copy heat policy file"
-  command: "cp {{ 'heat-api' | config_dir() }}/heat/policy.json {{ horizon_package_dir}}/openstack_dashboard/conf/heat_policy.json"
+- name: "HZN-WEB | copy_policy_files | Copy heat policy file and update permission"
+  shell: >-
+    cp {{ 'heat-api' | config_dir() }}/heat/policy.json {{ horizon_package_dir}}/openstack_dashboard/conf/heat_policy.json && chmod 0664 {{ horizon_package_dir}}/openstack_dashboard/conf/heat_policy.json
   when: heat_policy_file_info.stat.exists
 
 
