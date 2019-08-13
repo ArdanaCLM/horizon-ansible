@@ -16,7 +16,7 @@
 #
 ---
 - name: HZN-WEB | _add_monasca_checks | set fact for apache url
-  set_fact: hzn_apache_monitor_url="http://{{ host.bind.HZN_WEB.internal.ip_address }}:{{ host.bind.HZN_WEB.internal.port }}/server-status?auto"
+  set_fact: hzn_apache_monitor_url="http://{{ host.bind.HZN_WEB.internal.ip_address | ipwrap }}:{{ host.bind.HZN_WEB.internal.port }}/server-status?auto"
 
 - name: HZN-WEB | _add_monasca_checks | Monasca - Apache check
   monasca_agent_plugin:
