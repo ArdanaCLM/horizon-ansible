@@ -86,6 +86,12 @@
   command: "cp {{ 'keystone' | config_dir() }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/keystone_policy.json"
   when: keystone_policy_file_info.stat.exists
 
+# Remove "and None:%(target.role.domain_id)s" from rule "domain_admin_for_global_role_grants:"
+- name: HZN-WEB | patch keystone_policy_file | Remove None condition from rule domain_admin_for_global_role_grants
+  replace:
+    dest: "{{ horizon_package_dir }}/openstack_dashboard/conf/keystone_policy.json"
+    regexp: '^( *"domain_admin_for_global_role_grants".*)None:%\(target.role.domain_id\)s and (.*$)'
+    replace: '\1\2'
 
 - name: "HZN-WEB | copy_policy_files | Check for nova policy file"
   stat: path="{{ 'nova-api' | config_dir() }}/nova/policy.json"
