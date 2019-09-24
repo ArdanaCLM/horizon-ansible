@@ -20,6 +20,7 @@ horizon_centralized_log_group: horizon
 horizon_packages:
   - cron
   - apache2-mod_wsgi
+  - python-csscompressor
   # Django is not able to use PyMSQL, see
   # https://stackoverflow.com/questions/34777755/how-to-config-django-using-pymysql-as-driver
   - python-mysql

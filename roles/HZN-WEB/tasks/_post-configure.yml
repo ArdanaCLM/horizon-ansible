@@ -40,6 +40,18 @@
     DJANGO_SETTINGS_MODULE: openstack_dashboard.settings
     PYTHONPATH: "{{ horizon_package_dir }}"
 
+# List all the compressed css files from
+# /opt/stack/service/horizon/venv/dashboard/css
+- name: horizon_post_configure | post-configure | List compressed css files
+  command: "ls {{ horizon_static_dir  }}/dashboard/css"
+  register: css_file_path_result
+
+# Minify the css files
+- name: horizon_post_configure | post-configure | Minify the compresses css files
+  command: "python -m csscompressor {{ horizon_static_dir  }}/dashboard/css/{{ item }}  -o  {{ horizon_static_dir  }}/dashboard/css/{{ item }}"
+  with_items:
+    - "{{ css_file_path_result.stdout_lines }}"
+
 - name: horizon_post_configure | post-configure | DB migration and sync
   become: yes
   become_user: "{{ horizon_venv_user }}"
