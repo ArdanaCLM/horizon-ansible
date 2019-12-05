@@ -93,8 +93,8 @@
   stat: path="{{ 'nova-api' | config_dir() }}/nova/policy.json"
   register: nova_policy_file_info
 
-# the policy file for Nova no longer exists as of Pike, use a generated copy if possible
-# and use a static copy if Nova is not locally installed
+# the policy files for some services (Nova, Octavia) no longer exists as of Pike,
+# use a generated copy if possible and use a static copy if the service is not locally installed
 - name: "HZN-WEB | copy_policy_file_generator_script | Copy policy file generator"
   become: yes
   copy:
@@ -181,3 +181,12 @@
 - name: "HZN-WEB | copy_policy_files | Copy ceilometer policy file"
   command: "cp {{ 'ceilometer-api' | config_dir() }}/policy.json {{ horizon_package_dir }}/openstack_dashboard/conf/ceilometer_policy.json"
   when: ceilometer_policy_file_info.stat.exists
+
+- name: "HZN-WEB | copy_policy_files | Check for octavia installation"
+  stat: path="{{ 'octavia' | venv_dir() }}"
+  register: octavia_install_dir
+
+- name: "HZN-WEB | copy_policy_files | Generate octavia policy file"
+  become: yes
+  shell: "{{ horizon_package_dir }}/gen_policy.sh {{ 'octavia' | venv_dir() }} octavia octavia {{ 'octavia' | config_dir() }} {{ horizon_package_dir }} {{ horizon_venv_user }} yaml"
+  when: octavia_install_dir.stat.exists
