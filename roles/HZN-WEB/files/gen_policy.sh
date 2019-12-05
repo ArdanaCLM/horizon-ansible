@@ -17,12 +17,26 @@
 # parameters:
 # $1 - venv directory for the openstack service whose policy is being generated, must
 # contain bin/oslopolicy-policy-generator or script will fail
-# $2 - namespace
-# $3 - config-dir for the service
-# $4 - Horizon venv directory (file will be written to /openstack_dashboard/conf under here)
+# $2 - user account that has read access to the service config directory
+# $3 - namespace
+# $4 - config-dir for the service
+# $5 - Horizon venv directory (file will be written to /openstack_dashboard/conf under here)
+# $6 - user account that will be the owner of the generated policy configuration file
+# $7 - file format (yaml or json)
 servicevenv=$1
-namespace=$2
-configdir=$3
-horizonvenv=$4
+serviceuser=$2
+namespace=$3
+configdir=$4
+horizonvenv=$5
+horizonuser=$6
+format=${7:-json}
 
-${servicevenv}/bin/oslopolicy-policy-generator --namespace ${namespace} --config-dir ${configdir} | python -c 'import sys, yaml, json; y=yaml.load(sys.stdin.read()); print json.dumps(y)' | python -m json.tool > ${horizonvenv}/openstack_dashboard/conf/${namespace}_policy.json
+set -e
+
+policy_cfg=$(sudo -u ${serviceuser} ${servicevenv}/bin/oslopolicy-policy-generator --namespace ${namespace} --config-dir ${configdir})
+
+if [[ $format == json ]]; then
+    policy_cfg=$(python -c 'import sys, yaml, json; print json.dumps(yaml.load(sys.stdin.read()))' <<< "$policy_cfg" | python -m json.tool)
+fi
+
+cat <<< "$policy_cfg" | su - ${horizonuser} -s /bin/sh -c "cat > ${horizonvenv}/openstack_dashboard/conf/${namespace}_policy.${format}"
