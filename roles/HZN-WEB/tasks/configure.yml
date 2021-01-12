@@ -73,8 +73,24 @@
 # initialized early enough for the file to become root owned otherwise.
 - name: HZN-WEB | configure | Touch horizon-json log file
   file:
-    path: /var/log/horizon/horizon-json.log
+    path: /var/log/horizon/{{ item }}
     owner: "{{ horizon_user }}"
     group: "{{ horizon_centralized_log_group }}"
     mode: 0640
     state: touch
+  with_items:
+    - horizon-json.log
+    - horizon_access.log
+    - horizon_error.log
+
+# Touch the management file logs as {{ horizon_venv_user }}
+- name: HZN-WEB | install | Create log files
+  file:
+    path: /var/log/horizon/management/{{ item }}
+    owner: "{{ horizon_venv_user }}"
+    group: "{{ horizon_centralized_log_group }}"
+    mode: 0640
+    state: touch
+  with_items:
+    - management.log
+    - management-json.log
